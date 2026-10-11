@@ -1,0 +1,4 @@
+.python-bin
+.venv/
+.DS_Store
+Thumbs.db
