@@ -1,0 +1,15 @@
+# Serve Popling with nginx at http://localhost:8080
+#   docker compose up -d
+services:
+  popling:
+    image: nginx:1.27-alpine
+    container_name: popling
+    ports:
+      - "8080:80"
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./manifest.webmanifest:/usr/share/nginx/html/manifest.webmanifest:ro
+      - ./sw.js:/usr/share/nginx/html/sw.js:ro
+      - ./icons:/usr/share/nginx/html/icons:ro
+      - ./fonts:/usr/share/nginx/html/fonts:ro
+    restart: unless-stopped

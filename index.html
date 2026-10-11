@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <title>Popling</title>
 <meta name="description" content="Trap them in bubbles, then pop them. A single-screen arcade platformer.">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
 <meta name="theme-color" content="#ece6f5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#120c1d" media="(prefers-color-scheme: dark)">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Popling">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="preload" href="./fonts/press-start-2p-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+@font-face{font-family:"Press Start 2P";font-style:normal;font-weight:400;font-display:swap;
+  src:url("./fonts/press-start-2p-latin-400-normal.woff2") format("woff2")}
 :root{--bg:#ece6f5;--ink:#2a1f3d;--muted:#6b5f80;--bezel:#1b1328;--rim:#e0508f;--btn:#2a1f3d;--btn-ink:#fff}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#120c1d;--ink:#efe9ff;--muted:#a397bd;--bezel:#05030a;--rim:#ff7ab3;--btn:#2b2140;--btn-ink:#fff}}
 :root[data-theme="dark"]{--bg:#120c1d;--ink:#efe9ff;--muted:#a397bd;--bezel:#05030a;--rim:#ff7ab3;--btn:#2b2140;--btn-ink:#fff}
@@ -1282,7 +1282,7 @@ btnInstall.addEventListener('click',async()=>{
   }
 });
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
-  addEventListener('load',()=>{try{navigator.serviceWorker.register('sw.js').catch(()=>{});}catch(e){}});
+  addEventListener('load',()=>{try{navigator.serviceWorker.register('./sw.js').catch(()=>{});}catch(e){}});
 }
 /*DBG*/
 })();
