@@ -23,6 +23,7 @@ play offline.
 - [Running it locally](#running-it-locally)
 - [Deploying to GitHub Pages](#deploying-to-github-pages)
 - [Project layout](#project-layout)
+- [Editing rounds](#editing-rounds)
 - [Updating](#updating)
 - [Installing to the home screen](#installing-to-the-home-screen)
 - [Licences](#licences)
@@ -38,6 +39,9 @@ play offline.
   4,000 and so on.
 - **Bounce.** Hold jump while you land on a bubble to spring off it and reach
   higher platforms.
+- **Platforms and walls.** You can jump up through a platform from below and
+  land on top of it. A stack of three or more bricks is a wall: it blocks you
+  from the side and from below, and you can only stand on its top.
 - **Element bubbles** sometimes drift in from the sides. Pop them to use them
   as weapons. Fire drops flames, lightning shoots bolts left and right, and
   water sweeps enemies away with it.
@@ -47,7 +51,9 @@ play offline.
   angry, and soon after that a ghost chases you that can't be bubbled.
 - Every 70,000 points (100,000 later on) earns an **extra life**.
 
-There are 30 hand-built rounds, then generated rounds up to 99. On the title
+There are 40 hand-built rounds, then generated rounds up to 99. Some rounds
+use classic layouts, like rows of ledges, staircases and posts. Others are
+pictures, like a heart, a skull, a crown or the word *POP*. On the title
 menu you can pick a starting round, choose 1 or 2 players, switch between the
 *Classic* and *New* enemy sets, and turn sound on or off. The high score and
 your last round are saved in the browser's `localStorage`.
@@ -64,7 +70,10 @@ your last round are saved in the browser's `localStorage`.
 | Mute          | M                      | M             | M                      |                    |
 
 On touch devices, on-screen **◀ ▶**, **JUMP** and **BUBBLE** buttons appear.
-In landscape they sit either side of the screen.
+In landscape they sit either side of the screen. On tablets the buttons are
+larger. A finger that starts on the arrows keeps steering even if it slides
+off them: the side of the arrows it's nearest to sets the direction. A finger
+that starts on JUMP or BUBBLE presses whichever of the two is closest.
 
 ## Running it locally
 
@@ -147,6 +156,7 @@ sw.js                   service worker: offline cache
 icons/                  favicon, Apple touch icon, PWA icons (normal + maskable)
 fonts/                  self-hosted Press Start 2P (SIL OFL 1.1) and its licence
 docs/                   README images
+tools/check-levels.js   checks every round with the game's own physics (Node)
 .nojekyll               tells GitHub Pages to serve the files as they are
 install.sh / .bat       pick a Python for the local server (--clean to reset)
 run.sh / .bat           serve the folder locally on port 8000
@@ -155,6 +165,43 @@ docker-compose.yml      serve with nginx on port 8080
 
 All the sprites, levels, music and sound effects are generated in code inside
 `index.html`. There are no image or audio files to load.
+
+## Editing rounds
+
+The hand-built rounds are in the `LV` array in `index.html`. Each round is a
+26 × 32 picture of the screen:
+
+```
+#  brick              .  empty
+w  walker             h  hopper     f  flyer      s  shooter
+c  charger            d  drifter    t  thrower    x  splitter
+```
+
+Put an enemy letter in the cell just above the brick it should stand on.
+Flyers and drifters can go anywhere. Leave gaps in the top and bottom rows to
+let things fall through the floor and come back in at the top. Each round's
+`a` sets where trapped bubbles drift:
+
+- `{t:'pt',c,r}` gathers them at a column and row.
+- `{t:'loop',dir}` circles them round the screen.
+- `{t:'split',r}` gathers them on both sides at that row.
+
+After you edit a round, run the checker. It needs Node, and nothing to install:
+
+```bash
+node tools/check-levels.js              # all hand-built rounds
+node tools/check-levels.js 12           # one round
+node tools/check-levels.js --generated  # the generated rounds, 41-99
+```
+
+It plays every reachable jump from both spawn points using the game's own
+movement code. It reports a blocked spawn, an enemy inside a brick or in
+mid-air, any way the player can end up inside a wall, and ledges the player
+can't reach.
+
+Jumps are always the same height, about 6 rows. So if a ledge sits 3 rows
+below a long platform, you can't land on it from underneath: every jump carries
+you past it onto the platform above. The checker catches this.
 
 ## Updating
 
